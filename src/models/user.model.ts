@@ -1,3 +1,6 @@
+import userSchema from '../schemas/User'
+import { ZodError } from 'zod'
+
 export const userModel = {
   getAllUsers: async () => {
     return 'Get all users'
@@ -6,7 +9,15 @@ export const userModel = {
     return `Get a user by id: ${id}`
   },
   createUser: async (_input: {}) => {
-    return 'Create a new user'
+    try {
+      const user = userSchema.parse(_input)
+      return user
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return error.errors.map((err) => ({ message: err.message }))
+      }
+    }
+    return 'Not a valid user object'
   },
   updateUser: async (id: number, _input: {}) => {
     return `Update a user: ${id}`
