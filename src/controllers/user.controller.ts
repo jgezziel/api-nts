@@ -49,7 +49,6 @@ export const userController = {
     const newUser = await userModel.createUser(result.data)
 
     if (newUser instanceof Error) {
-      console.error(newUser.name)
       return res.status(400).json({
         status: 'error',
         code: 400,
