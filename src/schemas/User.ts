@@ -12,9 +12,9 @@ export interface UserAttributes {
 
 const UserSchema = z.object({
   id: z.number().optional(),
-  name: z.string(),
+  name: z.string().min(3),
   email: z.string().email(),
-  password: z.string()
+  password: z.string().min(8)
 })
 
 export const validateUser = (object: unknown) => {
