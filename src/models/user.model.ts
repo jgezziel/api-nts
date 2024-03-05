@@ -1,4 +1,5 @@
 import User, { UserAttributes } from '../schemas/User'
+import bcrypt from 'bcrypt'
 
 export const userModel = {
   getAllUsers: async () => {
@@ -15,10 +16,14 @@ export const userModel = {
     if (emailExists != null) {
       return new Error('Email already exists')
     }
+    const { password } = input
+    const hashedPassword: any = await bcrypt.hash(password, 10)
+    if (hashedPassword instanceof Error) {
+      return new Error('Error hashing password')
+    }
 
     try {
-      const newUser = await User.create(input)
-      return newUser
+      return await User.create({ ...input, password: hashedPassword })
     } catch (error) {
       return error
     }
